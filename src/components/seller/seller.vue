@@ -68,7 +68,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import BScroll from 'better-scroll';
   import {saveToLocal, loadFromLocal} from 'common/js/store';
   import star from 'components/star/star';

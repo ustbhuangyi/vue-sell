@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   const POSITIVE = 0;
   const NEGATIVE = 1;
   const ALL = 2;

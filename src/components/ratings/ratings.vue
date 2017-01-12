@@ -55,7 +55,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import BScroll from 'better-scroll';
   import {formatDate} from 'common/js/date';
   import star from 'components/star/star';

@@ -2,7 +2,7 @@
   <div class="split"></div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   export default {};
 </script>
 

@@ -64,7 +64,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import star from 'components/star/star';
 
   export default {
