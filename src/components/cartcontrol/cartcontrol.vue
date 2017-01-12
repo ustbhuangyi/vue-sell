@@ -42,7 +42,7 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus">
   .cartcontrol
     font-size: 0
     .cart-decrease

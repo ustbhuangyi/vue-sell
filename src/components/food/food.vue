@@ -145,8 +145,8 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+<style lang="stylus" >
+  @import "../../common/stylus/mixin.styl";
 
   .food
     position: fixed
