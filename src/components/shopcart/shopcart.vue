@@ -19,14 +19,14 @@
           </div>
         </div>
         <div class="ball-container">
-          <transition-group name="drop">
-            <div v-for="ball in balls" :key='ball' v-show="ball.show" class="ball">
+          <transition-group name="drop" @before-enter='beforeEnter' @enter='enter' @after-enter='afterEnter'>
+            <div v-for="(ball,index) in balls" :key='index' v-show="ball.show" class="ball drop-transition">
               <div class="inner inner-hook"></div>
             </div>
           </transition-group>
         </div>
         <transition name="fold">
-          <div class="shopcart-list" v-show="listShow">
+          <div class="shopcart-list fold-transition" v-show="listShow">
             <div class="list-header">
               <h1 class="title">购物车</h1>
               <span class="empty" @click="empty">清空</span>
@@ -48,7 +48,7 @@
       </transition>
     </div>
       <transition name="fade">
-        <div class="list-mask" @click="hideList" v-show="listShow"></div>
+        <div class="list-mask fade-transition" @click="hideList" v-show="listShow"></div>
       </transition>
   </div>
 </template>
@@ -185,11 +185,8 @@
           return;
         }
         window.alert(`支付${this.totalPrice}元`);
-      }
-    },
-    transitions: {
-      drop: {
-        beforeEnter(el) {
+      },
+      beforeEnter(el) {
           let count = this.balls.length;
           while (count--) {
             let ball = this.balls[count];
@@ -207,8 +204,6 @@
           }
         },
         enter(el) {
-          /* eslint-disable no-unused-vars */
-          let rf = el.offsetHeight;
           this.$nextTick(() => {
             el.style.webkitTransform = 'translate3d(0,0,0)';
             el.style.transform = 'translate3d(0,0,0)';
@@ -224,7 +219,6 @@
             el.style.display = 'none';
           }
         }
-      }
     },
     components: {
       cartcontrol

@@ -22,8 +22,7 @@ let router = new VueRouter({
 });
 
 /* eslint-disable no-new */
-/* eslint-disable no-unused-vars*/
-const app = new Vue({
+new Vue({
   el: '#app',
   components: { App },
   router: router,

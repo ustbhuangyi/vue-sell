@@ -30,7 +30,7 @@
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
     <transition name="fade">
-      <div v-show="detailShow" class="detail">
+      <div v-show="detailShow" class="detail fade-transition">
         <div class="detail-wrapper clearfix">
           <div class="detail-main">
             <h1 class="name">{{seller.name}}</h1>
@@ -97,7 +97,7 @@
   };
 </script>
 
-<style lang="stylus">
+<style scoped lang="stylus">
   @import "../../common/stylus/mixin";
 
   .header
@@ -224,12 +224,6 @@
       overflow: auto
       transition: all 0.5s
       backdrop-filter: blur(10px)
-      &.fade-transition
-        opacity: 1
-        background: rgba(7, 17, 27, 0.8)
-      &.fade-enter, &.fade-leave
-        opacity: 0
-        background: rgba(7, 17, 27, 0)
       .detail-wrapper
         width: 100%
         min-height: 100%
@@ -303,4 +297,10 @@
         margin: -64px auto 0 auto
         clear: both
         font-size: 32px
+  &.fade-transition
+        opacity: 1
+        background: rgba(7, 17, 27, 0.8)
+  &.fade-enter, &.fade-leave
+        opacity: 0
+        background: rgba(7, 17, 27, 0)  
 </style>

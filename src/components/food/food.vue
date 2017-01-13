@@ -108,7 +108,7 @@
         if (!event._constructed) {
           return;
         }
-        this.$emit('cart.add');
+        this.$emit('cartAdd', event.target);
         Vue.set(this.food, 'count', 1);
       },
       needShow(type, text) {

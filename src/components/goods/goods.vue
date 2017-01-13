@@ -31,7 +31,7 @@
                                                                   v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    <cartcontrol :food="food"></cartcontrol>
+                    <cartcontrol :food="food" @cartAdd='_drop($event)'></cartcontrol>
                   </div>
                 </div>
               </li>
@@ -42,7 +42,7 @@
       <shopcart ref='shopcart' :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
                 :min-price="seller.minPrice"></shopcart>
     </div>
-    <food :food="selectedFood" ref='food'></food>
+    <food :food="selectedFood" ref='food' @cartAdd='_drop($event)'></food>
   </div>
   
 </template>
@@ -94,7 +94,6 @@
     },
     created() {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-      this.$on('add-todo', this._drop);
 
       this.$http.get('/api/goods').then((response) => {
         response = response.body;
