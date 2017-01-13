@@ -1,48 +1,56 @@
 <template>
-  <div class="shopcart">
-    <div class="content" @click="toggleList">
-      <div class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight':totalCount>0}">
-            <i class="icon-shopping_cart" :class="{'highlight':totalCount>0}"></i>
+  <div>
+    <div class="shopcart">
+        <div class="content" @click="toggleList">
+          <div class="content-left">
+            <div class="logo-wrapper">
+              <div class="logo" :class="{'highlight':totalCount>0}">
+                <i class="icon-shopping_cart" :class="{'highlight':totalCount>0}"></i>
+              </div>
+              <div class="num" v-show="totalCount>0">{{totalCount}}</div>
+            </div>
+            <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
+            <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
           </div>
-          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
-        </div>
-        <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
-        <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
-      </div>
-      <div class="content-right" @click.stop.prevent="pay">
-        <div class="pay" :class="payClass">
-          {{payDesc}}
-        </div>
-      </div>
-    </div>
-    <div class="ball-container">
-      <div transition="drop" v-for="ball in balls" v-show="ball.show" class="ball">
-        <div class="inner inner-hook"></div>
-      </div>
-    </div>
-    <div class="shopcart-list" v-show="listShow" transition="fold">
-      <div class="list-header">
-        <h1 class="title">购物车</h1>
-        <span class="empty" @click="empty">清空</span>
-      </div>
-      <div class="list-content" v-el:list-content>
-        <ul>
-          <li class="food" v-for="food in selectFoods">
-            <span class="name">{{food.name}}</span>
-            <div class="price">
-              <span>￥{{food.price*food.count}}</span>
+          <div class="content-right" @click.stop.prevent="pay">
+            <div class="pay" :class="payClass">
+              {{payDesc}}
             </div>
-            <div class="cartcontrol-wrapper">
-              <cartcontrol :food="food"></cartcontrol>
+          </div>
+        </div>
+        <div class="ball-container">
+          <transition-group name="drop">
+            <div v-for="ball in balls" :key='ball' v-show="ball.show" class="ball">
+              <div class="inner inner-hook"></div>
             </div>
-          </li>
-        </ul>
-      </div>
+          </transition-group>
+        </div>
+        <transition name="fold">
+          <div class="shopcart-list" v-show="listShow">
+            <div class="list-header">
+              <h1 class="title">购物车</h1>
+              <span class="empty" @click="empty">清空</span>
+            </div>
+            <div class="list-content" ref='listContent'>
+            <ul>
+              <li class="food" v-for="food in selectFoods">
+                <span class="name">{{food.name}}</span>
+                <div class="price">
+                  <span>￥{{food.price*food.count}}</span>
+                </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </transition>
     </div>
+      <transition name="fade">
+        <div class="list-mask" @click="hideList" v-show="listShow"></div>
+      </transition>
   </div>
-  <div class="list-mask" @click="hideList" v-show="listShow" transition="fade"></div>
 </template>
 
 <script>
@@ -135,7 +143,7 @@
         if (show) {
           this.$nextTick(() => {
             if (!this.scroll) {
-              this.scroll = new BScroll(this.$els.listContent, {
+              this.scroll = new BScroll(this.$refs.listContent, {
                 click: true
               });
             } else {

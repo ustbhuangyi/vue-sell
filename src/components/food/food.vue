@@ -1,5 +1,6 @@
 <template>
-  <div v-show="showFlag" class="food" transition="move" v-el:food>
+  <transition name="move">
+    <div v-show="showFlag" class="food" ref='food'>
     <div class="food-content">
       <div class="image-header">
         <img :src="food.image">
@@ -19,8 +20,10 @@
         <div class="cartcontrol-wrapper">
           <cartcontrol :food="food"></cartcontrol>
         </div>
-        <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count===0" transition="fade">加入购物车
-        </div>
+        <transition name="fade">
+          <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count===0">加入购物车
+          </div>
+        </transition>
       </div>
       <split v-show="food.info"></split>
       <div class="info" v-show="food.info">
@@ -51,6 +54,8 @@
       </div>
     </div>
   </div>
+  </transition>
+  
 </template>
 
 <script >
@@ -88,7 +93,7 @@
         this.onlyContent = true;
         this.$nextTick(() => {
           if (!this.scroll) {
-            this.scroll = new BScroll(this.$els.food, {
+            this.scroll = new BScroll(this.$refs.food, {
               click: true
             });
           } else {
@@ -103,7 +108,7 @@
         if (!event._constructed) {
           return;
         }
-        this.$dispatch('cart.add', event.target);
+        this.$emit('cart.add');
         Vue.set(this.food, 'count', 1);
       },
       needShow(type, text) {
