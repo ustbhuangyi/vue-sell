@@ -19,11 +19,11 @@
           </div>
         </div>
         <div class="ball-container">
-          <transition-group name="drop" @before-enter='beforeEnter' @enter='enter' @after-enter='afterEnter'>
-            <div v-for="(ball,index) in balls" :key='index' v-show="ball.show" class="ball drop-transition">
+          <transition v-for="ball in balls" name="drop" @before-enter='beforeEnter' @enter='enter' @after-enter='afterEnter'>
+            <div v-show="ball.show" class="ball drop-transition">
               <div class="inner inner-hook"></div>
             </div>
-          </transition-group>
+          </transition>
         </div>
         <transition name="fold">
           <div class="shopcart-list fold-transition" v-show="listShow">
@@ -39,7 +39,7 @@
                   <span>￥{{food.price*food.count}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" @cartAdd='drop'></cartcontrol>
                 </div>
               </li>
             </ul>

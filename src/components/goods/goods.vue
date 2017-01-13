@@ -31,7 +31,7 @@
                                                                   v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
                   <div class="cartcontrol-wrapper">
-                    <cartcontrol :food="food" @cartAdd='_drop($event)'></cartcontrol>
+                    <cartcontrol :food="food" @cartAdd='_drop'></cartcontrol>
                   </div>
                 </div>
               </li>
@@ -42,7 +42,7 @@
       <shopcart ref='shopcart' :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
                 :min-price="seller.minPrice"></shopcart>
     </div>
-    <food :food="selectedFood" ref='food' @cartAdd='_drop($event)'></food>
+    <food :food="selectedFood" ref='food' @cartAdd='_drop'></food>
   </div>
   
 </template>
