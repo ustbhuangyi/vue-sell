@@ -103,14 +103,12 @@
         }
       },
       ratingtypeSelect(type) {
-        console.log('ratingtypeSelect');
         this.selectType = type;
         this.$nextTick(() => {
           this.scroll.refresh();
         });
       },
       contentToggle(onlyContent) {
-        console.log('onlyContent');
         this.onlyContent = onlyContent;
         this.$nextTick(() => {
           this.scroll.refresh();

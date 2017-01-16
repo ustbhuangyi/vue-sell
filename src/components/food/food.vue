@@ -34,7 +34,7 @@
         <div class="rating">
           <h1 class="title">商品评价</h1>
           <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc"
-                        :ratings="food.ratings"></ratingselect>
+                        :ratings="food.ratings" @ratingtypeSelect="ratingtypeSelect" @contentToggle="contentToggle"></ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
               <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings"
@@ -123,16 +123,14 @@
         } else {
           return type === this.selectType;
         }
-      }
-    },
-    events: {
-      'ratingtype.select'(type) {
+      },
+      ratingtypeSelect(type) {
         this.selectType = type;
         this.$nextTick(() => {
           this.scroll.refresh();
         });
       },
-      'content.toggle'(onlyContent) {
+      contentToggle(onlyContent) {
         this.onlyContent = onlyContent;
         this.$nextTick(() => {
           this.scroll.refresh();
