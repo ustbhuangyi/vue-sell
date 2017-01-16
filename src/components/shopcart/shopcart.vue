@@ -18,13 +18,6 @@
             </div>
           </div>
         </div>
-        <div class="ball-container">
-          <transition v-for="ball in balls" name="drop" @before-enter='beforeEnter' @enter='enter' @after-enter='afterEnter'>
-            <div v-show="ball.show" class="ball drop-transition">
-              <div class="inner inner-hook"></div>
-            </div>
-          </transition>
-        </div>
         <transition name="fold">
           <div class="shopcart-list fold-transition" v-show="listShow">
             <div class="list-header">
@@ -47,15 +40,17 @@
         </div>
       </transition>
     </div>
-      <transition name="fade">
-        <div class="list-mask fade-transition" @click="hideList" v-show="listShow"></div>
-      </transition>
+    <transition name="fade">
+      <div class="list-mask fade-transition" @click="hideList" v-show="listShow"></div>
+    </transition>
+    <ball ref='ball'></ball>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
+  import ball from 'components/ball/ball';
 
   export default {
     props: {
@@ -81,24 +76,6 @@
     },
     data() {
       return {
-        balls: [
-          {
-            show: false
-          },
-          {
-            show: false
-          },
-          {
-            show: false
-          },
-          {
-            show: false
-          },
-          {
-            show: false
-          }
-        ],
-        dropBalls: [],
         fold: true
       };
     },
@@ -156,15 +133,7 @@
     },
     methods: {
       drop(el) {
-        for (let i = 0; i < this.balls.length; i++) {
-          let ball = this.balls[i];
-          if (!ball.show) {
-            ball.show = true;
-            ball.el = el;
-            this.dropBalls.push(ball);
-            return;
-          }
-        }
+        this.$refs.ball.drop(el);
       },
       toggleList() {
         if (!this.totalCount) {
@@ -185,43 +154,11 @@
           return;
         }
         window.alert(`支付${this.totalPrice}元`);
-      },
-      beforeEnter(el) {
-          let count = this.balls.length;
-          while (count--) {
-            let ball = this.balls[count];
-            if (ball.show) {
-              let rect = ball.el.getBoundingClientRect();
-              let x = rect.left - 32;
-              let y = -(window.innerHeight - rect.top - 22);
-              el.style.display = '';
-              el.style.webkitTransform = `translate3d(0,${y}px,0)`;
-              el.style.transform = `translate3d(0,${y}px,0)`;
-              let inner = el.getElementsByClassName('inner-hook')[0];
-              inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
-              inner.style.transform = `translate3d(${x}px,0,0)`;
-            }
-          }
-        },
-        enter(el) {
-          this.$nextTick(() => {
-            el.style.webkitTransform = 'translate3d(0,0,0)';
-            el.style.transform = 'translate3d(0,0,0)';
-            let inner = el.getElementsByClassName('inner-hook')[0];
-            inner.style.webkitTransform = 'translate3d(0,0,0)';
-            inner.style.transform = 'translate3d(0,0,0)';
-          });
-        },
-        afterEnter(el) {
-          let ball = this.dropBalls.shift();
-          if (ball) {
-            ball.show = false;
-            el.style.display = 'none';
-          }
-        }
+      }
     },
     components: {
-      cartcontrol
+      cartcontrol,
+      ball
     }
   };
 </script>
@@ -315,20 +252,6 @@
           &.enough
             background: #00b43c
             color: #fff
-    .ball-container
-      .ball
-        position: fixed
-        left: 32px
-        bottom: 22px
-        z-index: 200
-        &.drop-transition
-          transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41)
-          .inner
-            width: 16px
-            height: 16px
-            border-radius: 50%
-            background: rgb(0, 160, 220)
-            transition: all 0.4s linear
     .shopcart-list
       position: absolute
       left: 0
@@ -394,7 +317,7 @@
       transition: all 0.5s
       opacity: 1
       background: rgba(7, 17, 27, 0.6)
-    &.fade-enter, &.fade-leave
+    &.fade-enter, &.fade-leave-active
       opacity: 0
       background: rgba(7, 17, 27, 0)
 </style>

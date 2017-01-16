@@ -1,61 +1,60 @@
 <template>
   <transition name="move">
-    <div v-show="showFlag" class="food" ref='food'>
-    <div class="food-content">
-      <div class="image-header">
-        <img :src="food.image">
-        <div class="back" @click="hide">
-          <i class="icon-arrow_lift"></i>
-        </div>
-      </div>
-      <div class="content">
-        <h1 class="title">{{food.name}}</h1>
-        <div class="detail">
-          <span class="sell-count">月售{{food.sellCount}}份</span>
-          <span class="rating">好评率{{food.rating}}%</span>
-        </div>
-        <div class="price">
-          <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
-        </div>
-        <div class="cartcontrol-wrapper">
-          <cartcontrol :food="food"></cartcontrol>
-        </div>
-        <transition name="fade">
-          <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count===0">加入购物车
+    <div v-show="showFlag" class="food move-transition" ref='food'>
+      <div class="food-content">
+        <div class="image-header">
+          <img :src="food.image">
+          <div class="back" @click="hide">
+            <i class="icon-arrow_lift"></i>
           </div>
-        </transition>
-      </div>
-      <split v-show="food.info"></split>
-      <div class="info" v-show="food.info">
-        <h1 class="title">商品信息</h1>
-        <p class="text">{{food.info}}</p>
-      </div>
-      <split></split>
-      <div class="rating">
-        <h1 class="title">商品评价</h1>
-        <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc"
-                      :ratings="food.ratings"></ratingselect>
-        <div class="rating-wrapper">
-          <ul v-show="food.ratings && food.ratings.length">
-            <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings"
-                class="rating-item border-1px">
-              <div class="user">
-                <span class="name">{{rating.username}}</span>
-                <img class="avatar" width="12" height="12" :src="rating.avatar">
-              </div>
-              <div class="time">{{rating.rateTime | formatDate}}</div>
-              <p class="text">
-                <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
-              </p>
-            </li>
-          </ul>
-          <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+        </div>
+        <div class="content">
+          <h1 class="title">{{food.name}}</h1>
+          <div class="detail">
+            <span class="sell-count">月售{{food.sellCount}}份</span>
+            <span class="rating">好评率{{food.rating}}%</span>
+          </div>
+          <div class="price">
+            <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+          </div>
+          <div class="cartcontrol-wrapper">
+            <cartcontrol :food="food" @cartAdd='drop'></cartcontrol>
+          </div>
+          <transition name="fade">
+            <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count===0">加入购物车
+            </div>
+          </transition>
+        </div>
+        <split v-show="food.info"></split>
+        <div class="info" v-show="food.info">
+          <h1 class="title">商品信息</h1>
+          <p class="text">{{food.info}}</p>
+        </div>
+        <split></split>
+        <div class="rating">
+          <h1 class="title">商品评价</h1>
+          <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc"
+                        :ratings="food.ratings"></ratingselect>
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings"
+                  class="rating-item border-1px">
+                <div class="user">
+                  <span class="name">{{rating.username}}</span>
+                  <img class="avatar" width="12" height="12" :src="rating.avatar">
+                </div>
+                <div class="time">{{rating.rateTime | formatDate}}</div>
+                <p class="text">
+                  <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
+                </p>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  </transition>
-  
+  </transition>  
 </template>
 
 <script >
@@ -87,6 +86,9 @@
       };
     },
     methods: {
+      drop(el) {
+        this.$emit('cartAdd', el);
+      },
       show() {
         this.showFlag = true;
         this.selectType = ALL;
@@ -108,6 +110,7 @@
         if (!event._constructed) {
           return;
         }
+        // this.$refs.ball.drop(event.target);
         this.$emit('cartAdd', event.target);
         Vue.set(this.food, 'count', 1);
       },
@@ -164,7 +167,7 @@
     &.move-transition
       transition: all 0.2s linear
       transform: translate3d(0, 0, 0)
-    &.move-enter, &.move-leave
+    &.move-enter, &.move-leave-active
       transform: translate3d(100%, 0, 0)
     .image-header
       position: relative

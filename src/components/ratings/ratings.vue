@@ -26,7 +26,7 @@
       </div>
       <split></split>
       <ratingselect :select-type="selectType" :only-content="onlyContent" :desc="desc"
-                    :ratings="ratings"></ratingselect>
+                    :ratings="ratings" @ratingtypeSelect="ratingtypeSelect" @contentToggle="contentToggle"></ratingselect>
       <div class="rating-wrapper">
         <ul>
           <li v-for="rating in ratings" v-show="needShow(rating.rateType, rating.text)" class="rating-item">
@@ -101,16 +101,16 @@
         } else {
           return type === this.selectType;
         }
-      }
-    },
-    events: {
-      'ratingtype.select'(type) {
+      },
+      ratingtypeSelect(type) {
+        console.log('ratingtypeSelect');
         this.selectType = type;
         this.$nextTick(() => {
           this.scroll.refresh();
         });
       },
-      'content.toggle'(onlyContent) {
+      contentToggle(onlyContent) {
+        console.log('onlyContent');
         this.onlyContent = onlyContent;
         this.$nextTick(() => {
           this.scroll.refresh();
