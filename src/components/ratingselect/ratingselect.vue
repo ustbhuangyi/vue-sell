@@ -72,7 +72,7 @@
           return;
         }
         // this.onlyContent = !this.onlyContent;
-        this.$emit('contentToggle', this.onlyContent);
+        this.$emit('contentToggle', !this.onlyContent);
       }
     }
   };
