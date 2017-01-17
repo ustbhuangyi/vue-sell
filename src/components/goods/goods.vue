@@ -44,7 +44,7 @@
   <food :food="selectedFood" v-ref:food></food>
 </template>
 
-<script type="text/ecmascript-6">
+<script >
   import BScroll from 'better-scroll';
   import shopcart from 'components/shopcart/shopcart';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
@@ -164,7 +164,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/mixin.styl";
 
   .goods
     display: flex

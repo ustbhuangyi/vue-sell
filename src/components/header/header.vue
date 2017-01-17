@@ -64,7 +64,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import star from 'components/star/star';
 
   export default {
@@ -95,7 +95,7 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus">
   @import "../../common/stylus/mixin";
 
   .header

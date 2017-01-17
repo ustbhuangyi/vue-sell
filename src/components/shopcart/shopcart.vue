@@ -45,7 +45,7 @@
   <div class="list-mask" @click="hideList" v-show="listShow" transition="fade"></div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   import BScroll from 'better-scroll';
   import cartcontrol from 'components/cartcontrol/cartcontrol';
 
@@ -224,8 +224,8 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+<style lang="stylus">
+  @import "../../common/stylus/mixin.styl";
 
   .shopcart
     position: fixed

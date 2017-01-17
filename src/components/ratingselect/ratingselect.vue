@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   const POSITIVE = 0;
   const NEGATIVE = 1;
   const ALL = 2;
@@ -78,8 +78,8 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+<style lang="stylus">
+  @import "../../common/stylus/mixin.styl";
 
   .ratingselect
     .rating-type
