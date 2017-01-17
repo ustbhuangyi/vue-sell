@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
   const POSITIVE = 0;
   const NEGATIVE = 1;
   const ALL = 2;
@@ -64,22 +64,22 @@
         if (!event._constructed) {
           return;
         }
-        this.selectType = type;
-        this.$dispatch('ratingtype.select', type);
+        // this.selectType = type;
+        this.$emit('ratingtypeSelect', type);
       },
       toggleContent(event) {
         if (!event._constructed) {
           return;
         }
-        this.onlyContent = !this.onlyContent;
-        this.$dispatch('content.toggle', this.onlyContent);
+        // this.onlyContent = !this.onlyContent;
+        this.$emit('contentToggle', !this.onlyContent);
       }
     }
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+<style lang="stylus">
+  @import "../../common/stylus/mixin.styl";
 
   .ratingselect
     .rating-type
