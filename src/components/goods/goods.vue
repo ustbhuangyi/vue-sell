@@ -13,7 +13,7 @@
       </div>
       <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
-          <li v-for="item in goods" class="food-list food-list-hook">
+          <li v-for="item in goods" class="food-list" ref="foodList">
             <h1 class="title">{{item.name}}</h1>
             <ul>
               <li @click="selectFood(food,$event)" v-for="food in item.foods" class="food-item border-1px">
@@ -110,7 +110,7 @@
         if (!event._constructed) {
           return;
         }
-        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+        let foodList = this.$refs.foodList;
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
       },
@@ -145,7 +145,7 @@
         });
       },
       _calculateHeight() {
-        let foodList = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
+        let foodList = this.$refs.foodList;
         let height = 0;
         this.listHeight.push(height);
         for (let i = 0; i < foodList.length; i++) {
