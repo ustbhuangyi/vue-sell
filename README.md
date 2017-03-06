@@ -5,6 +5,9 @@ Vue.js 高仿饿了么外卖 App 课程源码，课程地址： http://coding.im
 我们抵制和鄙视一切盗版侵权行为，请尊重作者的劳动果实！
 
 [项目演示地址](http://vuejssellapp.t.imooc.io/#!/)
+
+![二维码](http://static.galileo.xiaojukeji.com/static/tms/8btyrxfwosv6ht2whlut3j0mgwr84nkp.png)
+
 ## 你可以学到什么
 我们可以通过一张图来认识一下本课程的知识结构
 
