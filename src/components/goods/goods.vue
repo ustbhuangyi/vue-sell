@@ -141,7 +141,9 @@
         });
 
         this.foodsScroll.on('scroll', (pos) => {
-          this.scrollY = Math.abs(Math.round(pos.y));
+          if (pos.y <= 0) {
+            this.scrollY = Math.abs(Math.round(pos.y));
+          }
         });
       },
       _calculateHeight() {
