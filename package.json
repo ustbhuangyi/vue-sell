@@ -10,6 +10,11 @@
     "test": "",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
+  "keywords": [
+    "vue",
+    "vue-sell",
+    "webapp"
+  ],
   "dependencies": {
     "vue": "^2.2.1",
     "vue-resource": "1.0.3",
