@@ -4,7 +4,7 @@
       <div class="menu-wrapper" ref="menuWrapper">
         <ul>
           <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"
-              @click="selectMenu(index,$event)">
+              @click="selectMenu(index,$event)" ref="menuList">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
@@ -74,6 +74,7 @@
           let height1 = this.listHeight[i];
           let height2 = this.listHeight[i + 1];
           if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+            this._followScroll(i);
             return i;
           }
         }
@@ -141,7 +142,10 @@
         });
 
         this.foodsScroll.on('scroll', (pos) => {
-          this.scrollY = Math.abs(Math.round(pos.y));
+          // 判断滑动方向，避免下拉时分类高亮错误（如第一分类商品数量为1时，下拉使得第二分类高亮）
+          if (pos.y <= 0) {
+            this.scrollY = Math.abs(Math.round(pos.y));
+          }
         });
       },
       _calculateHeight() {
@@ -153,6 +157,11 @@
           height += item.clientHeight;
           this.listHeight.push(height);
         }
+      },
+      _followScroll(index) {
+        let menuList = this.$refs.menuList;
+        let el = menuList[index];
+        this.meunScroll.scrollToElement(el, 300, 0, -100);
       }
     },
     components: {
