@@ -19,10 +19,11 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {urlParse} from 'common/js/util';
+  import { urlParse } from 'common/js/util';
   import header from 'components/header/header.vue';
 
   const ERR_OK = 0;
+  const debug = process.env.NODE_ENV !== 'production';
 
   export default {
     data() {
@@ -36,7 +37,8 @@
       };
     },
     created() {
-      this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
+      const url = debug ? '/api/seller' : 'http://ustbhuangyi.com/sell/api/seller';
+      this.$http.get(url + '?id=' + this.seller.id).then((response) => {
         response = response.body;
         if (response.errno === ERR_OK) {
           this.seller = Object.assign({}, this.seller, response.data);
@@ -58,7 +60,7 @@
     width: 100%
     height: 40px
     line-height: 40px
-    // border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+  // border-bottom: 1px solid rgba(7, 17, 27, 0.1)
     border-1px(rgba(7, 17, 27, 0.1))
     .tab-item
       flex: 1
