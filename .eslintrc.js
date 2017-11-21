@@ -1,10 +1,15 @@
+// https://eslint.org/docs/user-guide/configuring
+
 module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module'
   },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
+  env: {
+    browser: true,
+  },
+  // https://github.com/standard/standard/blob/master/docs/RULES-en.md
   extends: 'standard',
   // required to lint *.vue files
   plugins: [
@@ -21,6 +26,7 @@ module.exports = {
     'semi': ['error', 'always'],
     'no-tabs': 0,
     'indent': 0,
-    'space-before-function-paren': 0
+    'space-before-function-paren': 0,
+    'no-multiple-empty-lines': ["error", { "max": 2, "maxBOF": 1}]
   }
 }
