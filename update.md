@@ -2,7 +2,7 @@
 ===================
 
 
-使vue-sell项目适配最新的vue-cli
+使 vue-sell 项目适配最新的 vue-cli
 
 ----------
 
@@ -11,17 +11,17 @@
 -------------
 
 
-####1.安装vue-resource  better-scroll
+#### 1.安装 vue-resource better-scroll
 ```
 cnpm install vue-resource better-scroll --save
 ```
 
-####2.安装stylus stylus-loader 
+#### 2.安装stylus stylus-loader 
 ```
 cnpm install stylus stylus-loader --save-dev
 ```
 
-####3.设置缩略路径
+#### 3.设置缩略路径
 >build/webapck.base.conf.js
 ```
     {
@@ -31,7 +31,7 @@ cnpm install stylus stylus-loader --save-dev
     }
 ```
 
-####4.修改.eslintrc.js 添加规则
+#### 4.修改.eslintrc.js 添加规则
 >/.eslintrc.js
 ```
     'semi': ['error', 'always'],
@@ -40,18 +40,7 @@ cnpm install stylus stylus-loader --save-dev
     'space-before-function-paren': 0
 ```
 
-
-
-####5.http://eslint.org/docs/rules/no-multiple-empty-lines  Too many blank lines at the end of file. Max of 0 allowed src\App.vue:52:1   App.vue报错
-
-.eslintrc.js 添加规则
->/.eslintrc.js
-```
-    'no-multiple-empty-lines': ["error", { "max": 2, "maxBOF": 1}]
-```
-
-
-####6.修改config目录下的index.js文件
+#### 5.修改config目录下的index.js文件
 
 修改host
 >/config/index.js
@@ -60,7 +49,7 @@ host: '0.0.0.0'
 ```
 
 
-####7.删除dev-server.js文件，使用webpack内置的devServer，设置before()
+#### 6.使用webpack内置的devServer，设置before()
 >/build/webpack.dev.conf.js
 ```
 devServer: {
@@ -90,20 +79,35 @@ devServer: {
 ```
 
 
-####8.路由栏     商品 评论 商家   的下划线消失了
-修改文件样式
->/src/App.vue
- 
- 将.tab 选择器下的
-```
-border-1px(rgba(7, 17, 27, 0.1))
-```
-移到注释
-```
-//border-bottom: 1px solid rgba(7, 17, 27, 0.1)
-```
-之前
-
-
-####9.从App.vue提取路由
+#### 7.在单独的 router.js 路由文件中编写路由
 >/src/router/index.js
+
+```js
+import Vue from 'vue';
+import Router from 'vue-router';
+import goods from 'components/goods/goods';
+import ratings from 'components/ratings/ratings';
+import seller from 'components/seller/seller';
+
+Vue.use(Router);
+
+const routes = [{
+  path: '/',
+  redirect: '/goods'
+}, {
+  path: '/goods',
+  component: goods
+}, {
+  path: '/ratings',
+  component: ratings
+}, {
+  path: '/seller',
+  component: seller
+}];
+
+export default new Router({
+    linkActiveClass: 'active',
+    routes
+});
+```
+

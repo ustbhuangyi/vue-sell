@@ -4,6 +4,8 @@ Vue.js 高仿饿了么外卖 App 课程源码，课程地址： http://coding.im
 本源码基于 GPL 协议，仅仅用于 Vue 实战项目的学习，不可作为商业用途。
 我们抵制和鄙视一切盗版侵权行为，请尊重作者的劳动果实！
 
+**注意：** 由于新版 vue-cli 已经改变，使用新版 vue-cli 初始化项目的同学参考[更新说明](https://github.com/ustbhuangyi/vue-sell/blob/master/update.md)
+
 [项目演示地址](http://ustbhuangyi.com/sell/)
 
 ![二维码](https://qr.api.cli.im/qr?data=http%253A%252F%252Fustbhuangyi.com%252Fsell%252F%2523%252Fgoods&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=686203a49c4613080b5b3004323ff977)

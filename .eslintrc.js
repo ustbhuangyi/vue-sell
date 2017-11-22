@@ -26,7 +26,6 @@ module.exports = {
     'semi': ['error', 'always'],
     'no-tabs': 0,
     'indent': 0,
-    'space-before-function-paren': 0,
-    'no-multiple-empty-lines': ["error", { "max": 2, "maxBOF": 1}]
+    'space-before-function-paren': 0
   }
 }
