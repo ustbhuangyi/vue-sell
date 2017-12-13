@@ -134,7 +134,7 @@
         });
       },
       _initScroll() {
-        this.meunScroll = new BScroll(this.$refs.menuWrapper, {
+        this.menuScroll = new BScroll(this.$refs.menuWrapper, {
           click: true
         });
 
