@@ -13,7 +13,7 @@
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
         <div class="content-right" @click.stop.prevent="pay">
-          <div class="pay" :class="payClass">
+          <div class="pay" :class="{enough:totalPrice>=minPrice}">
             {{payDesc}}
           </div>
         </div>
@@ -127,13 +127,6 @@
           return `还差￥${diff}元起送`;
         } else {
           return '去结算';
-        }
-      },
-      payClass() {
-        if (this.totalPrice < this.minPrice) {
-          return 'not-enough';
-        } else {
-          return 'enough';
         }
       },
       listShow() {
@@ -318,8 +311,7 @@
           text-align: center
           font-size: 12px
           font-weight: 700
-          &.not-enough
-            background: #2b333b
+          background: #2b333b
           &.enough
             background: #00b43c
             color: #fff
