@@ -13,13 +13,13 @@
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
         <div class="content-right" @click.stop.prevent="pay">
-          <div class="pay" :class="payClass">
+          <div class="pay" :class="{enough:totalPrice>=minPrice}">
             {{payDesc}}
           </div>
         </div>
       </div>
       <div class="ball-container">
-        <div v-for="ball in balls">
+        <div v-for="(ball, index) in balls" :key="index">
           <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
             <div class="ball" v-show="ball.show">
               <div class="inner inner-hook"></div>
@@ -35,7 +35,7 @@
           </div>
           <div class="list-content" ref="listContent">
             <ul>
-              <li class="food" v-for="food in selectFoods">
+              <li class="food" v-for="food in selectFoods" :key="food.name">
                 <span class="name">{{food.name}}</span>
                 <div class="price">
                   <span>￥{{food.price*food.count}}</span>
@@ -127,13 +127,6 @@
           return `还差￥${diff}元起送`;
         } else {
           return '去结算';
-        }
-      },
-      payClass() {
-        if (this.totalPrice < this.minPrice) {
-          return 'not-enough';
-        } else {
-          return 'enough';
         }
       },
       listShow() {
@@ -318,8 +311,7 @@
           text-align: center
           font-size: 12px
           font-weight: 700
-          &.not-enough
-            background: #2b333b
+          background: #2b333b
           &.enough
             background: #00b43c
             color: #fff
