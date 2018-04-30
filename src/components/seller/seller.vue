@@ -128,10 +128,6 @@
       },
       _initPics() {
         if (this.seller.pics) {
-          let picWidth = 120;
-          let margin = 6;
-          let width = (picWidth + margin) * this.seller.pics.length - margin;
-          this.$refs.picList.style.width = width + 'px';
           this.$nextTick(() => {
             if (!this.picScroll) {
               this.picScroll = new BScroll(this.$refs.picWrapper, {
@@ -279,6 +275,7 @@
         white-space: nowrap
         .pic-list
           font-size: 0
+          display: inline-block
           .pic-item
             display: inline-block
             margin-right: 6px
