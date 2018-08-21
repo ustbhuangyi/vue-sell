@@ -1,21 +1,15 @@
-/**
- * 解析url参数
- * @example ?id=12345&a=b
- * @return Object {id:12345,a:b}
- */
 export function urlParse() {
-  let url = window.location.search;
-  let obj = {};
-  let reg = /[?&][^?&]+=[^?&]+/g;
-  let arr = url.match(reg);
-  // ['?id=12345', '&a=b']
+  let ret = {}
+  const url = window.location.search
+  const reg = /[?&][^?&]+=[^?&]+/g
+  const arr = url.match(reg)
   if (arr) {
     arr.forEach((item) => {
-      let tempArr = item.substring(1).split('=');
-      let key = decodeURIComponent(tempArr[0]);
-      let val = decodeURIComponent(tempArr[1]);
-      obj[key] = val;
-    });
+      const tempArr = item.substring(1).split('=')
+      const key = decodeURIComponent(tempArr[0])
+      const val = decodeURIComponent(tempArr[1])
+      ret[key] = val
+    })
   }
-  return obj;
-};
+  return ret
+}

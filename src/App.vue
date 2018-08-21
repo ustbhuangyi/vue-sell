@@ -1,72 +1,76 @@
 <template>
-  <div>
+  <div id="app">
     <v-header :seller="seller"></v-header>
-    <div class="tab border-1px">
-      <div class="tab-item">
-        <router-link to="/goods">商品</router-link>
-      </div>
-      <div class="tab-item">
-        <router-link to="/ratings">评论</router-link>
-      </div>
-      <div class="tab-item">
-        <router-link to="/seller">商家</router-link>
-      </div>
+    <div class="tab-wrapper">
+      <tab :tabs="tabs"></tab>
     </div>
-    <keep-alive>
-      <router-view :seller="seller"></router-view>
-    </keep-alive>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-  import { urlParse } from 'common/js/util';
-  import header from 'components/header/header.vue';
-
-  const ERR_OK = 0;
-  const debug = process.env.NODE_ENV !== 'production';
+<script>
+  import { urlParse } from 'common/js/util'
+  import { getSeller } from 'api'
+  import Header from 'components/header/header.vue'
+  import Goods from 'components/goods/goods'
+  import Ratings from 'components/ratings/ratings'
+  import Seller from 'components/seller/seller'
+  import Tab from 'components/tab/tab'
 
   export default {
     data() {
       return {
         seller: {
-          id: (() => {
-            let queryParam = urlParse();
-            return queryParam.id;
-          })()
+          id: urlParse().id
         }
-      };
+      }
+    },
+    computed: {
+      tabs() {
+        return [
+          {
+            label: '商品',
+            component: Goods,
+            data: {
+              seller: this.seller
+            }
+          },
+          {
+            label: '评论',
+            component: Ratings,
+            data: {
+              seller: this.seller
+            }
+          },
+          {
+            label: '商家',
+            component: Seller,
+            data: {
+              seller: this.seller
+            }
+          }
+        ]
+      }
     },
     created() {
-      const url = debug ? '/api/seller' : 'http://ustbhuangyi.com/sell/api/seller';
-      this.$http.get(url + '?id=' + this.seller.id).then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.seller = Object.assign({}, this.seller, response.data);
-        }
-      });
+      getSeller().then((seller) => {
+        this.seller = seller
+      })
     },
     components: {
-      'v-header': header
+      Tab,
+      'v-header': Header
     }
-  };
+  }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "./common/stylus/mixin.styl"
-
-  .tab
-    display: flex
-    width: 100%
-    height: 40px
-    line-height: 40px
-    border-1px(rgba(7, 17, 27, 0.1))
-    .tab-item
-      flex: 1
-      text-align: center
-      & > a
-        display: block
-        font-size: 14px
-        color: rgb(77, 85, 93)
-        &.active
-          color: rgb(240, 20, 20)
+<style lang="stylus" scoped>
+  #app
+    >>> .cube-tab
+      padding: 10px 0
+    .tab-wrapper
+      position: fixed
+      top: 136px
+      left: 0
+      right: 0
+      bottom: 0
 </style>

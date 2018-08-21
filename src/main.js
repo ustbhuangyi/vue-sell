@@ -1,15 +1,12 @@
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import App from './App';
-import router from './router/index.js';
+import Vue from 'vue'
+import App from './App.vue'
+import './cube-ui'
+import './register'
 
-import 'common/stylus/index.styl';
+import 'common/stylus/index.styl'
 
-Vue.use(VueResource);
+Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
   render: h => h(App)
-});
+}).$mount('#app')

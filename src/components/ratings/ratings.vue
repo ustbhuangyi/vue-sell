@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings" ref="ratings">
+  <cube-scroll class="ratings" :options="scrollOptions">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -25,11 +25,22 @@
         </div>
       </div>
       <split></split>
-      <ratingselect @select="selectRating" @toggle="toggleContent" :selectType="selectType" :onlyContent="onlyContent"
-                    :ratings="ratings"></ratingselect>
+      <rating-select
+        @select="selectRating"
+        @toggle="toggleContent"
+        :selectType="selectType"
+        :onlyContent="onlyContent"
+        :ratings="ratings"
+        v-if="ratings.length"
+      >
+      </rating-select>
       <div class="rating-wrapper">
         <ul>
-          <li v-for="rating in ratings" v-show="needShow(rating.rateType, rating.text)" class="rating-item">
+          <li
+            v-for="(rating,index) in filteredRatings"
+            :key="index"
+            class="rating-item border-bottom-1px"
+          >
             <div class="avatar">
               <img width="28" height="28" :src="rating.avatar">
             </div>
@@ -42,7 +53,13 @@
               <p class="text">{{rating.text}}</p>
               <div class="recommend" v-show="rating.recommend && rating.recommend.length">
                 <span class="icon-thumb_up"></span>
-                <span class="item" v-for="item in rating.recommend">{{item}}</span>
+                <span
+                  class="item"
+                  v-for="(item,index) in rating.recommend"
+                  :key="index"
+                >
+                  {{item}}
+                </span>
               </div>
               <div class="time">
                 {{rating.rateTime | formatDate}}
@@ -52,95 +69,72 @@
         </ul>
       </div>
     </div>
-  </div>
+  </cube-scroll>
 </template>
 
-<script type="text/ecmascript-6">
-  import BScroll from 'better-scroll';
-  import {formatDate} from 'common/js/date';
-  import star from 'components/star/star';
-  import ratingselect from 'components/ratingselect/ratingselect';
-  import split from 'components/split/split';
-
-  const ALL = 2;
-  const ERR_OK = 0;
-  const debug = process.env.NODE_ENV !== 'production';
+<script>
+  import Star from 'components/star/star'
+  import RatingSelect from 'components/rating-select/rating-select'
+  import Split from 'components/split/split'
+  import { formatDate } from 'common/js/date'
+  import ratingMixin from 'common/mixins/rating'
+  import { getRatings } from 'api'
 
   export default {
+    name: 'ratings',
+    mixins: [ratingMixin],
     props: {
-      seller: {
+      data: {
         type: Object
       }
     },
     data() {
       return {
         ratings: [],
-        selectType: ALL,
-        onlyContent: true
-      };
-    },
-    created() {
-      const url = debug ? '/api/ratings' : 'http://ustbhuangyi.com/sell/api/ratings';
-      this.$http.get(url).then((response) => {
-        response = response.body;
-        if (response.errno === ERR_OK) {
-          this.ratings = response.data;
-          this.$nextTick(() => {
-            this.scroll = new BScroll(this.$refs.ratings, {
-              click: true
-            });
-          });
+        scrollOptions: {
+          click: false,
+          directionLockThreshold: 0
         }
-      });
+      }
+    },
+    computed: {
+      seller() {
+        return this.data.seller || {}
+      }
     },
     methods: {
-      needShow(type, text) {
-        if (this.onlyContent && !text) {
-          return false;
+      fetch() {
+        if (!this.fetched) {
+          this.fetched = true
+          getRatings(this.seller.id).then((ratings) => {
+            this.ratings = ratings
+          })
         }
-        if (this.selectType === ALL) {
-          return true;
-        } else {
-          return type === this.selectType;
-        }
-      },
-      selectRating(type) {
-        this.selectType = type;
-        this.$nextTick(() => {
-          this.scroll.refresh();
-        });
-      },
-      toggleContent() {
-        this.onlyContent = !this.onlyContent;
-        this.$nextTick(() => {
-          this.scroll.refresh();
-        });
       }
     },
     filters: {
       formatDate(time) {
-        let date = new Date(time);
-        return formatDate(date, 'yyyy-MM-dd hh:mm');
+        const date = new Date(time)
+        return formatDate(date, 'yyyy-MM-dd hh:mm')
       }
     },
     components: {
-      star,
-      split,
-      ratingselect
+      Star,
+      Split,
+      RatingSelect
     }
-  };
+  }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl"
+<style lang="stylus" scoped>
+  @import "~common/stylus/variable"
+  @import "~common/stylus/mixin"
 
   .ratings
-    position: absolute
-    top: 174px
-    bottom: 0
-    left: 0
-    width: 100%
-    overflow: hidden
+    position: relative
+    text-align: left
+    white-space: normal
+    height: 100%
     .overview
       display: flex
       padding: 18px 0
@@ -148,7 +142,7 @@
         flex: 0 0 137px
         padding: 6px 0
         width: 137px
-        border-right: 1px solid rgba(7, 17, 27, 0.1)
+        border-right: 1px solid $color-col-line
         text-align: center
         @media only screen and (max-width: 320px)
           flex: 0 0 120px
@@ -156,62 +150,60 @@
         .score
           margin-bottom: 6px
           line-height: 28px
-          font-size: 24px
-          color: rgb(255, 153, 0)
+          font-size: $fontsize-large-xxx
+          color: $color-orange
         .title
           margin-bottom: 8px
           line-height: 12px
-          font-size: 12px
-          color: rgb(7, 17, 27)
+          font-size: $fontsize-small
+          color: $color-dark-grey
         .rank
           line-height: 10px
-          font-size: 10px
-          color: rgb(147, 153, 159)
+          font-size: $fontsize-small-s
+          color: $color-light-grey
       .overview-right
         flex: 1
         padding: 6px 0 6px 24px
         @media only screen and (max-width: 320px)
           padding-left: 6px
         .score-wrapper
+          display: flex
+          align-items: center
           margin-bottom: 8px
-          font-size: 0
           .title
-            display: inline-block
             line-height: 18px
-            vertical-align: top
-            font-size: 12px
-            color: rgb(7, 17, 27)
+            font-size: $fontsize-small
+            color: $color-dark-grey
           .star
-            display: inline-block
             margin: 0 12px
-            vertical-align: top
           .score
-            display: inline-block
             line-height: 18px
-            vertical-align: top
-            font-size: 12px
-            color: rgb(255, 153, 0)
+            font-size: $fontsize-small
+            color: $color-orange
         .delivery-wrapper
-          font-size: 0
+          display: flex
+          align-items: center
           .title
             line-height: 18px
-            font-size: 12px
-            color: rgb(7, 17, 27)
+            font-size: $fontsize-small
+            color: $color-dark-grey
           .delivery
             margin-left: 12px
-            font-size: 12px
-            color: rgb(147, 153, 159)
+            font-size: $fontsize-small
+            color: $color-light-grey
     .rating-wrapper
       padding: 0 18px
       .rating-item
         display: flex
         padding: 18px 0
-        border-1px(rgba(7, 17, 27, 0.1))
+        &:last-child
+          border-none()
         .avatar
           flex: 0 0 28px
           width: 28px
           margin-right: 12px
           img
+            height: auto
             border-radius: 50%
         .content
           position: relative
@@ -219,46 +211,43 @@
           .name
             margin-bottom: 4px
             line-height: 12px
-            font-size: 10px
-            color: rgb(7, 17, 27)
+            font-size: $fontsize-small-s
+            color: $color-dark-grey
           .star-wrapper
             margin-bottom: 6px
-            font-size: 0
+            display: flex
+            align-items: center
             .star
-              display: inline-block
               margin-right: 6px
-              vertical-align: top
             .delivery
-              display: inline-block
-              vertical-align: top
-              line-height: 12px
-              font-size: 10px
-              color: rgb(147, 153, 159)
+              font-size: $fontsize-small-s
+              color: $color-light-grey
           .text
             margin-bottom: 8px
             line-height: 18px
-            color: rgb(7, 17, 27)
-            font-size: 12px
+            color: $color-dark-grey
+            font-size: $fontsize-small
           .recommend
+            display: flex
+            align-items: center
+            flex-wrap: wrap
             line-height: 16px
-            font-size: 0
             .icon-thumb_up, .item
-              display: inline-block
               margin: 0 8px 4px 0
-              font-size: 9px
+              font-size: $fontsize-small-s
             .icon-thumb_up
-              color: rgb(0, 160, 220)
+              color: $color-blue
             .item
               padding: 0 6px
-              border: 1px solid rgba(7, 17, 27, 0.1)
+              border: 1px solid $color-row-line
               border-radius: 1px
-              color: rgb(147, 153, 159)
-              background: #fff
+              color: $color-light-grey
+              background: $color-white
           .time
             position: absolute
             top: 0
             right: 0
             line-height: 12px
-            font-size: 10px
-            color: rgb(147, 153, 159)
+            font-size: $fontsize-small
+            color: $color-light-grey
 </style>
