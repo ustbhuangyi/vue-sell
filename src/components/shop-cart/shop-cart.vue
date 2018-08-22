@@ -183,7 +183,7 @@
         }
       },
       _showShopCartList() {
-        this.shopCartListComp = this.$createShopCartList({
+        this.shopCartListComp = this.shopCartListComp || this.$createShopCartList({
           $props: {
             selectFoods: 'selectFoods'
           },
@@ -202,7 +202,7 @@
         this.shopCartListComp.show()
       },
       _showShopCartSticky() {
-        this.shopCartStickyComp = this.$createShopCartSticky({
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
           $props: {
             selectFoods: 'selectFoods',
             deliveryPrice: 'deliveryPrice',
