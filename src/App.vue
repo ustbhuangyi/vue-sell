@@ -10,7 +10,7 @@
 <script>
   import qs from 'query-string'
   import { getSeller } from 'api'
-  import VHeader from 'components/v-header/v-header.vue'
+  import VHeader from 'components/v-header/v-header'
   import Goods from 'components/goods/goods'
   import Ratings from 'components/ratings/ratings'
   import Seller from 'components/seller/seller'

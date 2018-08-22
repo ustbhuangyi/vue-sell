@@ -85,7 +85,7 @@
   import { saveToLocal, loadFromLocal } from 'common/js/storage'
   import Star from 'components/star/star'
   import Split from 'components/split/split'
-  import SupportIco from "../support-ico/support-ico";
+  import SupportIco from 'components/support-ico/support-ico'
 
   export default {
     props: {
