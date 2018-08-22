@@ -8,9 +8,9 @@
 </template>
 
 <script>
-  import { urlParse } from 'common/js/util'
+  import qs from 'query-string'
   import { getSeller } from 'api'
-  import Header from 'components/header/header.vue'
+  import VHeader from 'components/v-header/v-header.vue'
   import Goods from 'components/goods/goods'
   import Ratings from 'components/ratings/ratings'
   import Seller from 'components/seller/seller'
@@ -20,7 +20,7 @@
     data() {
       return {
         seller: {
-          id: urlParse().id
+          id: qs.parse(location.search).id
         }
       }
     },
@@ -52,13 +52,15 @@
       }
     },
     created() {
-      getSeller().then((seller) => {
+      getSeller({
+        id: this.seller.id
+      }).then((seller) => {
         this.seller = seller
       })
     },
     components: {
       Tab,
-      'v-header': Header
+      VHeader
     }
   }
 </script>

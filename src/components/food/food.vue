@@ -57,7 +57,7 @@
                     <span class="name">{{rating.username}}</span>
                     <img class="avatar" width="12" height="12" :src="rating.avatar">
                   </div>
-                  <div class="time">{{rating.rateTime | formatDate}}</div>
+                  <div class="time">{{format(rating.rateTime)}}</div>
                   <p class="text">
                     <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
                   </p>
@@ -73,7 +73,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { formatDate } from 'common/js/date'
+  import moment from 'moment'
   import CartControl from 'components/cart-control/cart-control'
   import RatingSelect from 'components/rating-select/rating-select'
   import Split from 'components/split/split'
@@ -123,12 +123,9 @@
       },
       addFood(target) {
         this.$emit(EVENT_ADD, target)
-      }
-    },
-    filters: {
-      formatDate(time) {
-        let date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd hh:mm')
+      },
+      format(time) {
+        return moment(time).format('YYYY-MM-DD hh:mm')
       }
     },
     components: {

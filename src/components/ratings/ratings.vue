@@ -62,7 +62,7 @@
                 </span>
               </div>
               <div class="time">
-                {{rating.rateTime | formatDate}}
+                {{format(rating.rateTime)}}
               </div>
             </div>
           </li>
@@ -76,9 +76,9 @@
   import Star from 'components/star/star'
   import RatingSelect from 'components/rating-select/rating-select'
   import Split from 'components/split/split'
-  import { formatDate } from 'common/js/date'
   import ratingMixin from 'common/mixins/rating'
   import { getRatings } from 'api'
+  import moment from 'moment'
 
   export default {
     name: 'ratings',
@@ -110,12 +110,9 @@
             this.ratings = ratings
           })
         }
-      }
-    },
-    filters: {
-      formatDate(time) {
-        const date = new Date(time)
-        return formatDate(date, 'yyyy-MM-dd hh:mm')
+      },
+      format(time) {
+        return moment(time).format('YYYY-MM-DD hh:mm')
       }
     },
     components: {
