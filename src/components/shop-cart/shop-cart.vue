@@ -14,7 +14,7 @@
           <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
         </div>
-        <div class="content-right" @click.stop="pay">
+        <div class="content-right" @click="pay">
           <div class="pay" :class="payClass">
             {{payDesc}}
           </div>
@@ -23,7 +23,6 @@
       <div class="ball-container">
         <div v-for="(ball,index) in balls" :key="index">
           <transition
-            name="drop"
             @before-enter="beforeDrop"
             @enter="dropping"
             @after-enter="afterDrop">
@@ -38,10 +37,10 @@
 </template>
 
 <script>
-  import CartControl from 'components/cart-control/cart-control'
   import Bubble from 'components/bubble/bubble'
 
   const BALL_LEN = 10
+  const innerClsHook = 'inner-hook'
 
   function createBalls() {
     let balls = []
@@ -112,7 +111,7 @@
         }
       },
       payClass() {
-        if (this.totalPrice < this.minPrice) {
+        if (!this.totalCount || this.totalPrice < this.minPrice) {
           return 'not-enough'
         } else {
           return 'enough'
@@ -120,17 +119,6 @@
       }
     },
     methods: {
-      drop(el) {
-        for (let i = 0; i < this.balls.length; i++) {
-          let ball = this.balls[i]
-          if (!ball.show) {
-            ball.show = true
-            ball.el = el
-            this.dropBalls.push(ball)
-            return
-          }
-        }
-      },
       toggleList() {
         if (this.listFold) {
           if (!this.totalCount) {
@@ -144,7 +132,7 @@
           this._hideShopCartList()
         }
       },
-      pay() {
+      pay(e) {
         if (this.totalPrice < this.minPrice) {
           return
         }
@@ -152,31 +140,38 @@
           title: '支付',
           content: `您需要支付${this.totalPrice}元`
         }).show()
+        e.stopPropagation()
+      },
+      drop(el) {
+        for (let i = 0; i < this.balls.length; i++) {
+          const ball = this.balls[i]
+          if (!ball.show) {
+            ball.show = true
+            ball.el = el
+            this.dropBalls.push(ball)
+            return
+          }
+        }
       },
       beforeDrop(el) {
-        let ball = this.dropBalls[this.dropBalls.length - 1]
-        let rect = ball.el.getBoundingClientRect()
-        let x = rect.left - 32
-        let y = -(window.innerHeight - rect.top - 22)
+        const ball = this.dropBalls[this.dropBalls.length - 1]
+        const rect = ball.el.getBoundingClientRect()
+        const x = rect.left - 32
+        const y = -(window.innerHeight - rect.top - 22)
         el.style.display = ''
-        el.style.webkitTransform = `translate3d(0,${y}px,0)`
-        el.style.transform = `translate3d(0,${y}px,0)`
-        let inner = el.getElementsByClassName('inner-hook')[0]
-        inner.style.webkitTransform = `translate3d(${x}px,0,0)`
-        inner.style.transform = `translate3d(${x}px,0,0)`
+        el.style.transform = el.style.webkitTransform = `translate3d(0,${y}px,0)`
+        const inner = el.getElementsByClassName(innerClsHook)[0]
+        inner.style.transform = inner.style.webkitTransform = `translate3d(${x}px,0,0)`
       },
       dropping(el, done) {
-        // force reflow to put everything in position
         this._reflow = document.body.offsetHeight
-        el.style.webkitTransform = 'translate3d(0,0,0)'
-        el.style.transform = 'translate3d(0,0,0)'
-        let inner = el.getElementsByClassName('inner-hook')[0]
-        inner.style.webkitTransform = 'translate3d(0,0,0)'
-        inner.style.transform = 'translate3d(0,0,0)'
+        el.style.transform = el.style.webkitTransform = `translate3d(0,0,0)`
+        const inner = el.getElementsByClassName(innerClsHook)[0]
+        inner.style.transform = inner.style.webkitTransform = `translate3d(0,0,0)`
         el.addEventListener('transitionend', done)
       },
       afterDrop(el) {
-        let ball = this.dropBalls.shift()
+        const ball = this.dropBalls.shift()
         if (ball) {
           ball.show = false
           el.style.display = 'none'
@@ -207,8 +202,7 @@
             selectFoods: 'selectFoods',
             deliveryPrice: 'deliveryPrice',
             minPrice: 'minPrice',
-            fold: this.listFold,
-            sticky: true,
+            fold: 'listFold',
             list: this.shopCartListComp
           }
         })
@@ -223,6 +217,9 @@
       }
     },
     watch: {
+      fold(newVal) {
+        this.listFold = newVal
+      },
       totalCount(count) {
         if (!this.fold && count === 0) {
           this._hideShopCartList()
@@ -230,7 +227,6 @@
       }
     },
     components: {
-      CartControl,
       Bubble
     }
   }

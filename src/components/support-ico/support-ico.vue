@@ -24,7 +24,6 @@
 
 <style lang="stylus" scoped>
   @import "~common/stylus/mixin"
-  @import "~common/stylus/variable"
 
   .support-ico
     display: inline-block

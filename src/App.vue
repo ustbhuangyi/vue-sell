@@ -52,11 +52,16 @@
       }
     },
     created() {
-      getSeller({
-        id: this.seller.id
-      }).then((seller) => {
-        this.seller = seller
-      })
+      this._getSeller()
+    },
+    methods: {
+      _getSeller() {
+        getSeller({
+          id: this.seller.id
+        }).then((seller) => {
+          this.seller = Object.assign({}, this.seller, seller)
+        })
+      }
     },
     components: {
       Tab,
@@ -67,8 +72,6 @@
 
 <style lang="stylus" scoped>
   #app
-    >>> .cube-tab
-      padding: 10px 0
     .tab-wrapper
       position: fixed
       top: 136px

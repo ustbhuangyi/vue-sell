@@ -10,21 +10,21 @@
         <template slot="bar" slot-scope="props">
           <cube-scroll-nav-bar
             direction="vertical"
-            :txts="props.labels"
             :labels="props.labels"
-            :current="props.current">
+            :txts="barTxts"
+            :current="props.current"
+          >
             <template slot-scope="props">
               <div class="text">
                 <support-ico
-                  v-if="supportIco(props.label)"
+                  v-if="props.txt.type>=1"
                   :size=3
-                  :type="getIcoType(props.label)"
-                >
-                </support-ico>
-                <span>{{parseLabel(props.label)}}</span>
-                <span class="num" v-if="showBubble(props.label)">
-                   <bubble :num="getCount(props.label)"></bubble>
-                  </span>
+                  :type="props.txt.type"
+                ></support-ico>
+                <span>{{props.txt.name}}</span>
+                <span class="num" v-if="props.txt.count">
+                  <bubble :num="props.txt.count"></bubble>
+                </span>
               </div>
             </template>
           </cube-scroll-nav-bar>
@@ -32,7 +32,7 @@
         <cube-scroll-nav-panel
           v-for="good in goods"
           :key="good.name"
-          :label="computeLabel(good)"
+          :label="good.name"
           :title="good.name"
         >
           <ul>
@@ -56,7 +56,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cart-control-wrapper">
-                  <cart-control @add="addFood" :food="food"></cart-control>
+                  <cart-control @add="onAdd" :food="food"></cart-control>
                 </div>
               </div>
             </li>
@@ -67,9 +67,9 @@
     <div class="shop-cart-wrapper">
       <shop-cart
         ref="shopCart"
-        :selectFoods="selectFoods"
-        :deliveryPrice="seller.deliveryPrice"
-        :minPrice="seller.minPrice"></shop-cart>
+        :select-foods="selectFoods"
+        :delivery-price="seller.deliveryPrice"
+        :min-price="seller.minPrice"></shop-cart>
     </div>
   </div>
 </template>
@@ -104,7 +104,7 @@
     },
     computed: {
       seller() {
-        return this.data.seller || {}
+        return this.data.seller
       },
       selectFoods() {
         let foods = []
@@ -116,6 +116,22 @@
           })
         })
         return foods
+      },
+      barTxts() {
+        let ret = []
+        this.goods.forEach((good) => {
+          const {type, name, foods} = good
+          let count = 0
+          foods.forEach((food) => {
+            count += food.count || 0
+          })
+          ret.push({
+            type,
+            name,
+            count
+          })
+        })
+        return ret
       }
     },
     methods: {
@@ -129,37 +145,16 @@
           })
         }
       },
-      computeLabel(good) {
-        const {name, type, foods} = good
-        let count = 0
-        foods.forEach((food) => {
-          count += food.count || 0
-        })
-        return `${name}:${type}:${count}`
-      },
-      parseLabel(label) {
-        const [name] = label.split(':')
-        return name
-      },
-      supportIco(label) {
-        const [, type] = label.split(':')
-        return type >= 0
-      },
-      getIcoType(label) {
-        const [, type] = label.split(':')
-        return parseInt(type)
-      },
-      showBubble(label) {
-        const [, , count] = label.split(':')
-        return count > 0
-      },
-      getCount(label) {
-        const [, , count] = label.split(':')
-        return parseInt(count)
-      },
       selectFood(food) {
         this.selectedFood = food
-        this.foodComp = this.$createFood({
+        this._showFood()
+        this._showShopCartSticky()
+      },
+      onAdd(target) {
+        this.$refs.shopCart.drop(target)
+      },
+      _showFood() {
+        this.foodComp = this.foodComp || this.$createFood({
           $props: {
             food: 'selectedFood'
           },
@@ -173,19 +168,14 @@
           }
         })
         this.foodComp.show()
-        this._showShopCartSticky()
-      },
-      addFood(target) {
-        this.$refs.shopCart.drop(target)
       },
       _showShopCartSticky() {
-        this.shopCartStickyComp = this.$createShopCartSticky({
+        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
           $props: {
             selectFoods: 'selectFoods',
             deliveryPrice: this.seller.deliveryPrice,
             minPrice: this.seller.minPrice,
-            fold: true,
-            sticky: true
+            fold: true
           }
         })
         this.shopCartStickyComp.show()

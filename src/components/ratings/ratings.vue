@@ -26,18 +26,17 @@
       </div>
       <split></split>
       <rating-select
-        @select="selectRating"
-        @toggle="toggleContent"
+        @select="onSelect"
+        @toggle="onToggle"
         :selectType="selectType"
         :onlyContent="onlyContent"
         :ratings="ratings"
-        v-if="ratings.length"
       >
       </rating-select>
       <div class="rating-wrapper">
         <ul>
           <li
-            v-for="(rating,index) in filteredRatings"
+            v-for="(rating,index) in computedRatings"
             :key="index"
             class="rating-item border-bottom-1px"
           >
@@ -106,7 +105,9 @@
       fetch() {
         if (!this.fetched) {
           this.fetched = true
-          getRatings(this.seller.id).then((ratings) => {
+          getRatings({
+            id: this.seller.id
+          }).then((ratings) => {
             this.ratings = ratings
           })
         }

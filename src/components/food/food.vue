@@ -25,7 +25,7 @@
               <cart-control @add="addFood" :food="food"></cart-control>
             </div>
             <transition name="fade">
-              <div @click.stop.prevent="addFirst" class="buy" v-show="!food.count || food.count===0">
+              <div @click="addFirst" class="buy" v-show="!food.count">
                 加入购物车
               </div>
             </transition>
@@ -39,17 +39,17 @@
           <div class="rating">
             <h1 class="title">商品评价</h1>
             <rating-select
-              @select="selectRating"
-              @toggle="toggleContent"
+              @select="onSelect"
+              @toggle="onToggle"
               :selectType="selectType"
               :onlyContent="onlyContent"
               :desc="desc"
               :ratings="ratings">
             </rating-select>
             <div class="rating-wrapper">
-              <ul v-show="ratings && ratings.length">
+              <ul v-show="computedRatings && computedRatings.length">
                 <li
-                  v-for="(rating,index) in filteredRatings"
+                  v-for="(rating,index) in computedRatings"
                   class="rating-item border-bottom-1px"
                   :key="index"
                 >
@@ -63,7 +63,7 @@
                   </p>
                 </li>
               </ul>
-              <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+              <div class="no-rating" v-show="!computedRatings || !computedRatings.length">暂无评价</div>
             </div>
           </div>
         </div>
@@ -136,7 +136,7 @@
   }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus" scoped>
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin.styl"
 

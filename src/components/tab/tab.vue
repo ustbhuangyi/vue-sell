@@ -4,7 +4,7 @@
       :useTransition=false
       :showSlider=true
       v-model="selectedLabel"
-      :data="bars"
+      :data="tabs"
       ref="tabBar"
       class="border-bottom-1px"
     >
@@ -54,21 +54,12 @@
       }
     },
     computed: {
-      bars() {
-        let ret = []
-        this.tabs.forEach((tab) => {
-          ret.push({
-            label: tab.label
-          })
-        })
-        return ret
-      },
       selectedLabel: {
         get() {
-          return this.bars[this.index].label
+          return this.tabs[this.index].label
         },
         set(newVal) {
-          this.index = this.bars.findIndex((value) => {
+          this.index = this.tabs.findIndex((value) => {
             return value.label === newVal
           })
         }
@@ -79,10 +70,10 @@
     },
     methods: {
       onScroll(pos) {
-        const tabWidth = this.$refs.tabBar.$el.clientWidth
+        const tabBarWidth = this.$refs.tabBar.$el.clientWidth
         const slideWidth = this.$refs.slide.slide.scrollerWidth
-        const deltaX = -pos.x / slideWidth * tabWidth
-        this.$refs.tabBar.setSliderTransform(deltaX)
+        const transform = -pos.x / slideWidth * tabBarWidth
+        this.$refs.tabBar.setSliderTransform(transform)
       },
       onChange(current) {
         this.index = current
@@ -102,6 +93,8 @@
     display: flex
     flex-direction: column
     height: 100%
+    >>> .cube-tab
+      padding: 10px 0
     .slide-wrapper
       flex: 1
       overflow: hidden

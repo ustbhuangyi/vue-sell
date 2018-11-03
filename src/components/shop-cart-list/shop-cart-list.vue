@@ -21,15 +21,15 @@
             <ul>
               <li
                 class="food"
-                v-for="food in selectFoods"
-                :key="food.name"
+                v-for="(food,index) in selectFoods"
+                :key="index"
               >
                 <span class="name">{{food.name}}</span>
                 <div class="price">
                   <span>￥{{food.price*food.count}}</span>
                 </div>
                 <div class="cart-control-wrapper">
-                  <cart-control @add="addFood" :food="food"></cart-control>
+                  <cart-control @add="onAdd" :food="food"></cart-control>
                 </div>
               </li>
             </ul>
@@ -67,7 +67,7 @@
       })
     },
     methods: {
-      addFood(target) {
+      onAdd(target) {
         this.$emit(EVENT_ADD, target)
       },
       afterLeave() {
@@ -77,12 +77,9 @@
         this.hide()
       },
       empty() {
-        this.dialogComp = this.dialogComp || this.$createDialog({
+        this.dialogComp = this.$createDialog({
           type: 'confirm',
           content: '清空购物车？',
-          confirmBtn: {
-            text: '清空'
-          },
           $events: {
             confirm: () => {
               this.selectFoods.forEach((food) => {

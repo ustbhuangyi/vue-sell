@@ -4,7 +4,7 @@ const urlMap = {
   development: '/',
   production: 'http://ustbhuangyi.com/sell/'
 }
-const baseUrl = urlMap[process.env.NODE_ENV || 'development']
+const baseUrl = urlMap[process.env.NODE_ENV]
 const ERR_OK = 0
 
 export function get(url) {
@@ -12,9 +12,9 @@ export function get(url) {
     return axios.get(baseUrl + url, {
       params
     }).then((res) => {
-      const serverData = res.data
-      if (serverData.errno === ERR_OK) {
-        return serverData.data
+      const {errno, data} = res.data
+      if (errno === ERR_OK) {
+        return data
       }
     }).catch((e) => {
     })

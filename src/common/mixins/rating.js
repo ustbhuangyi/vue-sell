@@ -8,7 +8,7 @@ export default {
     }
   },
   computed: {
-    filteredRatings() {
+    computedRatings() {
       let ret = []
       this.ratings.forEach((rating) => {
         if (this.onlyContent && !rating.text) {
@@ -22,10 +22,10 @@ export default {
     }
   },
   methods: {
-    selectRating(type) {
+    onSelect(type) {
       this.selectType = type
     },
-    toggleContent() {
+    onToggle() {
       this.onlyContent = !this.onlyContent
     }
   }
