@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const path = require('path')
 const appData = require('./data.json')
 const seller = appData.seller
@@ -52,5 +53,9 @@ module.exports = {
       .set('components', resolve('src/components'))
       .set('common', resolve('src/common'))
       .set('api', resolve('src/api'))
+
+    config.plugin('context')
+      .use(webpack.ContextReplacementPlugin,
+        [/moment[/\\]locale$/, /zh-cn/])
   }
 }
