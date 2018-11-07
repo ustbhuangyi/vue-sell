@@ -100,12 +100,12 @@
       return {
         favorite: false,
         sellerScrollOptions: {
-          stopPropagation: true,
           directionLockThreshold: 0,
           click: false
         },
         picScrollOptions: {
           scrollX: true,
+          stopPropagation: true,
           directionLockThreshold: 0
         }
       }
