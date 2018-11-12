@@ -1,5 +1,5 @@
 <template>
-  <cube-scroll class="ratings" :options="scrollOptions">
+  <cube-scroll ref="scroll" class="ratings" :options="scrollOptions">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -87,7 +87,7 @@
         type: Object
       }
     },
-    data() {
+    data () {
       return {
         ratings: [],
         scrollOptions: {
@@ -97,12 +97,12 @@
       }
     },
     computed: {
-      seller() {
+      seller () {
         return this.data.seller || {}
       }
     },
     methods: {
-      fetch() {
+      fetch () {
         if (!this.fetched) {
           this.fetched = true
           getRatings({
@@ -112,7 +112,7 @@
           })
         }
       },
-      format(time) {
+      format (time) {
         return moment(time).format('YYYY-MM-DD hh:mm')
       }
     },
@@ -120,6 +120,13 @@
       Star,
       Split,
       RatingSelect
+    },
+    watch: {
+      selectType () {
+        this.$nextTick(() => {
+          this.$refs.scroll.refresh()
+        })
+      }
     }
   }
 </script>
