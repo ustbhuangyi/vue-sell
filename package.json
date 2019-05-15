@@ -14,9 +14,7 @@
     "good-storage": "^1.0.1",
     "moment": "^2.22.2",
     "query-string": "^6.1.0",
-    "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue": "^2.6.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0",
@@ -26,7 +24,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-cube-ui": "^0.1.2",
-    "vue-template-compiler": "^2.5.17"
+    "vue-template-compiler": "^2.6.6"
   },
   "transformModules": {
     "cube-ui": {
