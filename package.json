@@ -9,7 +9,7 @@
     "report": "vue-cli-service build --report"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "ts-axios-new": "^0.1.5",
     "cube-ui": "^1.12.0",
     "good-storage": "^1.0.1",
     "moment": "^2.22.2",

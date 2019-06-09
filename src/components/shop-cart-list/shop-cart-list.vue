@@ -12,7 +12,7 @@
         name="move"
         @after-leave="afterLeave"
       >
-        <div v-show="visible">
+        <div v-if="visible">
           <div class="list-header">
             <h1 class="title">购物车</h1>
             <span class="empty" @click="empty">清空</span>
